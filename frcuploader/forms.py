@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
 
-import os
-import shutil
-import sys
 import json
+import os
 import pickle
-import threading
+import shutil
 import subprocess
-from time import sleep
-from queue import Queue
+import sys
+import threading
+from argparse import Namespace
 from copy import deepcopy
 from datetime import datetime
 from distutils.version import StrictVersion as sv
-
-from . import consts
-from . import utils
+from queue import Queue
+from time import sleep
 
 import requests
-from argparse import Namespace
-
 from pyforms_lite import BaseWidget
+from pyforms_lite.controls import (ControlButton, ControlCheckBox,
+                                   ControlCombo, ControlDir, ControlList,
+                                   ControlNumber, ControlText, ControlTextArea)
 from PyQt5 import QtCore, QtGui
-from pyforms_lite.controls import ControlNumber
-from pyforms_lite.controls import ControlText, ControlDir
-from pyforms_lite.controls import ControlTextArea, ControlList
-from pyforms_lite.controls import ControlCombo
-from pyforms_lite.controls import ControlButton, ControlCheckBox
+
+from . import consts, utils
 
 
 class EmittingStream(QtCore.QObject):

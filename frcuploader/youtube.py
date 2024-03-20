@@ -4,24 +4,23 @@ try:
     import http.client as httplib
 except ImportError:
     import httplib
-import httplib2
+
+import errno
 import os
 import sys
-import errno
-from time import sleep
 from decimal import Decimal
+from time import sleep
 
-from . import consts
-
+import httplib2
 from google_auth_oauthlib.flow import InstalledAppFlow
-
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
-
+from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import run_flow
-from oauth2client.client import flow_from_clientsecrets
+
+from . import consts
 
 httplib2.RETRIES = 1
 

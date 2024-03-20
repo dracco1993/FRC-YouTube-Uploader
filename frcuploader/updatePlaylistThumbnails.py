@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from googleapiclient.errors import HttpError
+
 from .youtube import get_youtube_service
 
 THUMBNAIL = ""

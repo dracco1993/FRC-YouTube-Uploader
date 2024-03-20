@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 
+import datetime as dt
+import hashlib
+import json
 import os
 import re
-import json
-import time
 import shutil
-import hashlib
-import datetime as dt
+import time
 
 import requests
+from cachecontrol import CacheControl
+from cachecontrol.heuristics import ExpiresAfter
 from googleapiclient.errors import HttpError
 
 from . import consts
-from .youtube import upload, RETRIABLE_EXCEPTIONS, RETRIABLE_STATUS_CODES
-
-from cachecontrol import CacheControl
-from cachecontrol.heuristics import ExpiresAfter
+from .youtube import RETRIABLE_EXCEPTIONS, RETRIABLE_STATUS_CODES, upload
 
 app_id = {"X-TBA-App-Id": ""}
 trusted_auth = {"X-TBA-Auth-Id": "", "X-TBA-Auth-Sig": ""}

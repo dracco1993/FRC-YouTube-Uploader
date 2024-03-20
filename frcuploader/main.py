@@ -6,10 +6,10 @@ import pyforms_lite
 
 from . import consts
 from .forms import *
-from .youtube import *
-from .updateTBA import main as utmain
 from .playlistToTBA import main as pttmain
 from .updatePlaylistThumbnails import main as uptmain
+from .updateTBA import main as utmain
+from .youtube import *
 
 
 def main():

@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 """ this script will take any playlist that uploaded videos using the uploader and link the matches to TBA"""
 
-from .youtube import *
 from . import consts
-from .utils import (
-    quarters_match_code,
-    semis_match_code,
-    finals_match_code,
-    tiebreak_mnum,
-    get_match_results,
-)
+from .utils import (finals_match_code, get_match_results, quarters_match_code,
+                    semis_match_code, tiebreak_mnum)
+from .youtube import *
 
 
 def update_description(

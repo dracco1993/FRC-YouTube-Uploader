@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from . import consts
-
 from pyforms_lite import BaseWidget
 from pyforms_lite.controls import ControlButton, ControlList
+
+from . import consts
 
 
 class OptionsViewer(BaseWidget):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
-import pkg_resources
 
+import pkg_resources
 import tbapy
 
 __version__ = pkg_resources.require("FRCUploader")[0].version
@@ -38,6 +38,7 @@ Uploaded with FRC-YouTube-Uploader (https://github.com/NikhilNarayana/FRC-YouTub
 VALID_PRIVACY_STATUSES = ("public", "unlisted", "private")
 
 GAMES = {
+    "2024": "FIRST CRESCENDO presented by Haas, FIRST CRESCENDO, FIRST CRESCENDO, Crescendo",
     "2023": "FIRST ENERGIZE: Charged Up, Charged Up, CHARGED UP",
     "2022": "Rapid React, RAPID REACT",
     "2021": "FIRST Rise: Infinite Recharge, Rise: INFINITE RECHARGE, INFINITE RECHARGE",
