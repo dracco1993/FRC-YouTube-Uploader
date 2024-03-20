@@ -1,6 +1,14 @@
+import os.path
 import subprocess
 
 FOLDER = "videos"
+
+MATCH_TOTAL_TIME = 15 + 3 + 135
+
+MATCH_BEFORE_SECONDS = 5
+MATCH_AFTER_SECONDS = 5
+SCORE_BEFORE_SECONDS = 3
+SCORE_AFTER_SECONDS = 3
 
 def get_duration(input_video):
     cmd = [
@@ -18,19 +26,25 @@ def get_duration(input_video):
     return subprocess.check_output(cmd).decode("utf-8").strip()
 
 
-def main():
-    name = f"{FOLDER}/stream.mp4"
-    times = []
-    times.append(["00:00:00", "00:00:5"])
-    times.append(["00:00:10", "00:00:20"])
-    # times = [["00:00:00", get_duration(name)]]
-    if len(times) == 1:
-        time = times[0]
+def get_start_time(input_video):
+    return int(os.path.getctime(input_video))
+
+
+def format_seconds(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+
+def clip_from_stream(input_video, output_video, time_segments):
+    if len(time_segments) == 1:
+        time = time_segments[0]
         cmd = [
             "ffmpeg",
             "-y",
             "-i",
-            name,
+            input_video,
             "-ss",
             time[0],
             "-to",
@@ -39,18 +53,18 @@ def main():
             "copy",
             "-c:a",
             "copy",
-            "{FOLDER}/output.mp4",
+            output_video,
         ]
         subprocess.check_output(cmd)
     else:
         open(f"{FOLDER}/concatenate.txt", "w").close()
-        for idx, time in enumerate(times):
+        for idx, time in enumerate(time_segments):
             output_filename = f"output{idx}.mp4"
             cmd = [
                 "ffmpeg",
                 "-y",
                 "-i",
-                name,
+                input_video,
                 "-ss",
                 time[0],
                 "-to",
@@ -75,10 +89,42 @@ def main():
             f"{FOLDER}/concatenate.txt",
             "-c",
             "copy",
-            f"{FOLDER}/output.mp4",
+            output_video,
         ]
         output = subprocess.check_output(cmd).decode("utf-8").strip()
-        print(output)
+
+        # TODO: Add some error handling here
+        # print(output)
+
+
+def main():
+    stream_start_time = get_start_time(f"{FOLDER}/stream.mp4")
+    print(f"Stream start time: {stream_start_time}")
+
+    # Time of match start in seconds since stream start
+    match_start_time = (
+        stream_start_time + 10 # Pull from API
+    ) - stream_start_time
+
+    # Time of match end in seconds since stream start
+    match_end_time = (
+        match_start_time + MATCH_TOTAL_TIME
+    )
+
+    post_result_time = (stream_start_time + 180) - stream_start_time  # Pull from API
+
+    time_segments = [
+        [
+            format_seconds(match_start_time - MATCH_BEFORE_SECONDS),
+            format_seconds(match_end_time + MATCH_AFTER_SECONDS),
+        ],
+        [
+            format_seconds(post_result_time - SCORE_BEFORE_SECONDS),
+            format_seconds(post_result_time + SCORE_AFTER_SECONDS),
+        ],
+    ]
+    print(time_segments)
+    # clip_from_stream(f"{FOLDER}/stream.mp4", f"{FOLDER}/asdf.mp4", time_segments)
 
 
 if __name__ == "__main__":
