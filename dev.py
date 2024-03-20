@@ -1,5 +1,6 @@
 import subprocess
 
+FOLDER = "videos"
 
 def get_duration(input_video):
     cmd = [
@@ -18,15 +19,16 @@ def get_duration(input_video):
 
 
 def main():
-    name = "input.mkv"
+    name = f"{FOLDER}/stream.mp4"
     times = []
-    times.append(["00:00:00", "00:00:10"])
-    times.append(["00:06:00", "00:07:00"])
+    times.append(["00:00:00", "00:00:5"])
+    times.append(["00:00:10", "00:00:20"])
     # times = [["00:00:00", get_duration(name)]]
     if len(times) == 1:
         time = times[0]
         cmd = [
             "ffmpeg",
+            "-y",
             "-i",
             name,
             "-ss",
@@ -37,15 +39,16 @@ def main():
             "copy",
             "-c:a",
             "copy",
-            "output.mp4",
+            "{FOLDER}/output.mp4",
         ]
         subprocess.check_output(cmd)
     else:
-        open("concatenate.txt", "w").close()
+        open(f"{FOLDER}/concatenate.txt", "w").close()
         for idx, time in enumerate(times):
             output_filename = f"output{idx}.mp4"
             cmd = [
                 "ffmpeg",
+                "-y",
                 "-i",
                 name,
                 "-ss",
@@ -56,22 +59,23 @@ def main():
                 "copy",
                 "-c:a",
                 "copy",
-                output_filename,
+                f"{FOLDER}/{output_filename}",
             ]
             subprocess.check_output(cmd)
 
-            with open("concatenate.txt", "a") as myfile:
+            with open(f"{FOLDER}/concatenate.txt", "a") as myfile:
                 myfile.write(f"file {output_filename}\n")
 
         cmd = [
             "ffmpeg",
+            "-y",
             "-f",
             "concat",
             "-i",
-            "concatenate.txt",
+            f"{FOLDER}/concatenate.txt",
             "-c",
             "copy",
-            "output.mp4",
+            f"{FOLDER}/output.mp4",
         ]
         output = subprocess.check_output(cmd).decode("utf-8").strip()
         print(output)
