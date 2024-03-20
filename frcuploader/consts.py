@@ -7,7 +7,7 @@ import tbapy
 __version__ = pkg_resources.require("FRCUploader")[0].version
 
 # Default Variables
-DEBUG = False  # DON'T COMMIT THIS LINE IF TRUE
+DEBUG = True  # DON'T COMMIT THIS LINE IF TRUE
 DEFAULT_TAGS = "{}, frcuploader, FIRST, omgrobots, FRC, FIRST Robotics Competition, robots, Robotics, {game}"
 MATCH_TYPE = ("qm", "qf", "sf", "f1m")
 DEFAULT_DESCRIPTION = """Footage of the {ename} is courtesy of {team}.
