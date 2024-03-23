@@ -10,12 +10,12 @@ __version__ = pkg_resources.require("FRCUploader")[0].version
 DEBUG = True  # DON'T COMMIT THIS LINE IF TRUE
 DEFAULT_TAGS = "{}, frcuploader, FIRST, omgrobots, FRC, FIRST Robotics Competition, robots, Robotics, {game}"
 MATCH_TYPE = ("qm", "qf", "sf", "f1m")
-DEFAULT_DESCRIPTION = """Footage of the {ename} is courtesy of {team}.
+DEFAULT_DESCRIPTION = """Footage of the {event_name} is courtesy of {team}.
 
 Red Alliance  ({red1}, {red2}, {red3}) - {redscore}
 Blue Alliance ({blue3}, {blue2}, {blue1}) - {bluescore}
 
-To view match schedules and results for this event, visit The Blue Alliance Event Page: https://www.thebluealliance.com/event/{ecode}
+To view match schedules and results for this event, visit The Blue Alliance Event Page: https://www.thebluealliance.com/event/{event_code}
 
 Follow us on Twitter (@{twit}) and Facebook ({fb}).
 
@@ -23,7 +23,7 @@ For more information and future event schedules, visit our website: {weblink}
 
 Thanks for watching!"""
 
-NO_TBA_DESCRIPTION = """Footage of the {ename} Event is courtesy of {team}.
+NO_TBA_DESCRIPTION = """Footage of the {event_name} Event is courtesy of {team}.
 
 Follow us on Twitter (@{twit}) and Facebook ({fb}).
 
@@ -65,7 +65,7 @@ error = None
 sleep_minutes = 600
 retry = 0
 youtube = None
-tba = tbapy.TBA("wvIxtt5Qvbr2qJtqW7ZsZ4vNppolYy0zMNQduH8LdYA7v2o1myt8ZbEOHAwzRuqf")
+tba = tbapy.TBA("i60ceyqM8KSe94CMb5OQm19OxZUghZ8oDfjHMwnoUPztvC4g87KBBlWGtN4vkLdN")
 trusted = False
 sizes = ("bytes", "KB", "MB", "GB", "TB")
 cerem = (

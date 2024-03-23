@@ -99,8 +99,8 @@ class FRC_Uploader(BaseWidget):
         self._twit = ControlText("Twitter Handle")
         self._fb = ControlText("Facebook Name")
         self._weblink = ControlText(" Website Link")
-        self._ename = ControlText("Event Name")
-        self._ecode = ControlText("Event Code")
+        self._event_name = ControlText("Event Name")
+        self._event_code = ControlText("Event Code")
         self._pID = ControlText(" Playlist ID")
         self._tbaID = ControlText("TBA ID")
         self._tbaSecret = ControlText("TBA Secret")
@@ -109,7 +109,7 @@ class FRC_Uploader(BaseWidget):
         self._description.add_popup_menu_option("Reset", self.__reset_descrip_event)
 
         # Match Values
-        self._mcode = ControlText(
+        self._match_code = ControlText(
             "Match Code",
             visible=False,
             helptext="READ THE INSTRUCTIONS TO FIND OUT HOW TO USE THIS!",
@@ -140,7 +140,7 @@ class FRC_Uploader(BaseWidget):
         self.formset = [
             {
                 "-Match Values": [
-                    (" ", "_mcode", " "),
+                    (" ", "_match_code", " "),
                     (" ", "_mnum", " "),
                     (" ", "_mtype", " "),
                     (" ", "_tiebreak", "_tba", "_replay", " "),
@@ -154,15 +154,24 @@ class FRC_Uploader(BaseWidget):
                     "=",
                     "_qview",
                 ],
-                "Event Values-": [
+                "-Event Values-": [
                     ("_where", "_newest"),
                     "_sendto",
                     ("_prodteam", "_twit", "_fb"),
-                    ("_weblink", "_ename", "_ecode"),
+                    ("_weblink", "_event_name", "_event_code"),
                     ("_pID", "_tbaID", "_tbaSecret"),
                     ("_privacy", " "),
                     "_description",
                 ],
+                # "-Splitting Values-": [
+                #     ("_where", "_newest"),
+                #     "_sendto",
+                #     ("_prodteam", "_twit", "_fb"),
+                #     ("_weblink", "_event_name", "_event_code"),
+                #     ("_pID", "_tbaID", "_tbaSecret"),
+                #     ("_privacy", " "),
+                #     "_description",
+                # ],
             },
             (" ", "_button", " "),
         ]
@@ -193,7 +202,7 @@ class FRC_Uploader(BaseWidget):
         self._tbaID.value = "Go to thebluealliance.com/request/apiwrite to get keys"
         self._tbaSecret.value = "Go to thebluealliance.com/request/apiwrite to get keys"
         self._description.value = consts.DEFAULT_DESCRIPTION
-        self._mcode.value = "0"
+        self._match_code.value = "0"
         self._mnum.value = 1
 
         # Add ControlCombo values
@@ -225,13 +234,13 @@ class FRC_Uploader(BaseWidget):
             self._twit,
             self._fb,
             self._weblink,
-            self._ename,
-            self._ecode,
+            self._event_name,
+            self._event_code,
             self._pID,
             self._tbaID,
             self._tbaSecret,
             self._description,
-            self._mcode,
+            self._match_code,
             self._mnum,
             self._mtype,
             self._tiebreak,
@@ -257,17 +266,17 @@ class FRC_Uploader(BaseWidget):
         options.twit = self._twit.value
         options.fb = self._fb.value
         options.weblink = self._weblink.value
-        options.ename = self._ename.value
-        options.ecode = self._ecode.value
+        options.event_name = self._event_name.value
+        options.event_code = self._event_code.value
         f = self._pID.value.find("PL")
         self._pID.value = self._pID.value[f : f + 34]
         options.pID = self._pID.value
         options.tbaID = self._tbaID.value
         options.tbaSecret = self._tbaSecret.value
-        if not consts.trusted and options.tbaID and options.tbaSecret and options.ecode:
-            consts.tba.update_trusted(options.tbaID, options.tbaSecret, options.ecode)
+        if not consts.trusted and options.tbaID and options.tbaSecret and options.event_code:
+            consts.tba.update_trusted(options.tbaID, options.tbaSecret, options.event_code)
         options.description = self._description.value
-        options.mcode = self._mcode.value
+        options.match_code = self._match_code.value
         options.mnum = int(self._mnum.value)
         options.mtype = self._mtype.value
         options.tiebreak = deepcopy(self._tiebreak.value)
@@ -301,12 +310,12 @@ class FRC_Uploader(BaseWidget):
         options.ignore = False
         if not int(self._end.value):
             if options.ceremonies:
-                self._qview += (options.ecode, consts.cerem[options.ceremonies], "N/A")
+                self._qview += (options.event_code, consts.cerem[options.ceremonies], "N/A")
             else:
-                self._qview += (options.ecode, options.mtype, options.mnum)
+                self._qview += (options.event_code, options.mtype, options.mnum)
         elif not options.newest:
             for r in range(options.mnum, int(self._end.value)):
-                self._qview += (options.ecode, options.mtype, options.mnum)
+                self._qview += (options.event_code, options.mtype, options.mnum)
                 self._queue.put(options)
                 self._queueref.append(options)
                 self._qview.resize_rows_contents()
@@ -321,7 +330,7 @@ class FRC_Uploader(BaseWidget):
             )
             self._end.value = 0
         if int(self._end.value):
-            self._qview += (options.ecode, options.mtype, options.mnum)
+            self._qview += (options.event_code, options.mtype, options.mnum)
         self._queue.put(options)
         self._queueref.append(options)
         self._qview.resize_rows_contents()
@@ -391,13 +400,13 @@ class FRC_Uploader(BaseWidget):
             row[2] = deepcopy(options.twit)
             row[3] = deepcopy(options.fb)
             row[4] = deepcopy(options.weblink)
-            row[5] = deepcopy(options.ename)
-            row[6] = deepcopy(options.ecode)
+            row[5] = deepcopy(options.event_name)
+            row[6] = deepcopy(options.event_code)
             row[7] = deepcopy(options.pID)
             row[8] = deepcopy(options.tbaID)
             row[9] = deepcopy(options.tbaSecret)
             row[10] = deepcopy(options.description)
-            row[11] = deepcopy(options.mcode)
+            row[11] = deepcopy(options.match_code)
             row[12] = deepcopy(options.mnum)
             row[13] = deepcopy(options.mtype)
             row[14] = deepcopy(options.tiebreak)
@@ -475,12 +484,12 @@ class FRC_Uploader(BaseWidget):
                     for options in self._queueref:
                         if options.ceremonies:
                             self._qview += (
-                                options.ecode,
+                                options.event_code,
                                 consts.cerem[options.ceremonies],
                                 "N/A",
                             )
                         else:
-                            self._qview += (options.ecode, options.mtype, options.mnum)
+                            self._qview += (options.event_code, options.mtype, options.mnum)
                         self._queue.put(options)
                         self._qview.resize_rows_contents()
                         self.__save_form(options)
@@ -494,12 +503,12 @@ class FRC_Uploader(BaseWidget):
                 for options in self._queueref:
                     if options.ceremonies:
                         self._qview += (
-                            options.ecode,
+                            options.event_code,
                             consts.cerem[options.ceremonies],
                             "N/A",
                         )
                     else:
-                        self._qview += (options.ecode, options.mtype, options.mnum)
+                        self._qview += (options.event_code, options.mtype, options.mnum)
                     self._queue.put(options)
                     self._qview.resize_rows_contents()
                     self.__save_form(options)
@@ -521,7 +530,7 @@ class FRC_Uploader(BaseWidget):
         self._tbaID.value = "Go to thebluealliance.com/request/apiwrite to get keys"
         self._tbaSecret.value = "Go to thebluealliance.com/request/apiwrite to get keys"
         self._description.value = consts.DEFAULT_DESCRIPTION
-        self._mcode.value = "0"
+        self._match_code.value = "0"
         self._mnum.value = 1
         self._end.value = 0
         self._mtype.value = "qm"
@@ -534,8 +543,8 @@ class FRC_Uploader(BaseWidget):
         self._twit.value = ""
         self._fb.value = ""
         self._weblink.value = ""
-        self._ename.value = ""
-        self._ecode.value = ""
+        self._event_name.value = ""
+        self._event_code.value = ""
         self._pID.value = ""
 
     def __reset_yt_cred(self):
@@ -569,10 +578,10 @@ class FRC_Uploader(BaseWidget):
         self._queueref.pop(row)
 
     def __toggle_match_code(self):
-        if self._mcode.visible:
-            self._mcode.hide()
+        if self._match_code.visible:
+            self._match_code.hide()
         else:
-            self._mcode.show()
+            self._match_code.show()
 
 
 class YouTubeSelector(BaseWidget):

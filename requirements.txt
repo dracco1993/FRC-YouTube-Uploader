@@ -1,0 +1,9 @@
+requests
+httplib2
+CacheControl
+google-api-python-client
+google_auth_oauthlib
+oauth2client
+Pyforms-Lite
+tbapy
+urllib3==1.26

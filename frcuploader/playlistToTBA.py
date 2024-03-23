@@ -8,17 +8,17 @@ from .youtube import *
 
 
 def update_description(
-    youtube, snippet, vID, ecode, mcode, ename, team, twit, fb, weblink
+    youtube, snippet, vID, event_code, match_code, event_name, team, twit, fb, weblink
 ):
     """
     Creates an updated TBA Description and updates the video
     """
     description = consts.DEFAULT_DESCRIPTION + consts.CREDITS
     print(snippet)
-    blue_data, red_data = get_match_results(ecode, mcode)
+    blue_data, red_data = get_match_results(event_code, match_code)
     description = description.format(
-        ecode=ecode,
-        ename=ename,
+        event_code=event_code,
+        event_name=event_name,
         team=team,
         twit=twit,
         fb=fb,
@@ -46,13 +46,13 @@ def main():
     PID = PID[f : f + 34]
     TBAID = input("TBA ID: ")
     TBASECRET = input("TBA Secret: ")
-    ecode = input("Event Code (eg: 2018incmp): ")
-    ename = input("Event Name: ")
+    event_code = input("Event Code (eg: 2018incmp): ")
+    event_name = input("Event Name: ")
     team = input("Production Team Name: ")
     twit = input("Twitter Handle: ")
     fb = input("Facebook Name: ")
     weblink = input("Website Link")
-    consts.tba.update_trusted(TBAID, TBASECRET, ecode)
+    consts.tba.update_trusted(TBAID, TBASECRET, event_code)
 
     if TBAID == "" or TBASECRET == "":
         print("Can't add to TBA without ID and Secret")
@@ -110,9 +110,9 @@ def main():
                 youtube,
                 playlist_item,
                 video_id,
-                ecode,
+                event_code,
                 mnum,
-                ename,
+                event_name,
                 team,
                 twit,
                 fb,
@@ -132,9 +132,9 @@ def main():
                 youtube,
                 playlist_item,
                 video_id,
-                ecode,
+                event_code,
                 mnum,
-                ename,
+                event_name,
                 team,
                 twit,
                 fb,
@@ -154,9 +154,9 @@ def main():
                 youtube,
                 playlist_item,
                 video_id,
-                ecode,
+                event_code,
                 mnum,
-                ename,
+                event_name,
                 team,
                 twit,
                 fb,
@@ -176,9 +176,9 @@ def main():
                 youtube,
                 playlist_item,
                 video_id,
-                ecode,
+                event_code,
                 mnum,
-                ename,
+                event_name,
                 team,
                 twit,
                 fb,

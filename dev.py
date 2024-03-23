@@ -1,7 +1,14 @@
+import base64
+import datetime
+import os
 import os.path
 import subprocess
 
+import requests_oauthlib
+import tbapy
+
 FOLDER = "videos"
+EVENT_KEY = "2024incol"
 
 MATCH_TOTAL_TIME = 15 + 3 + 135
 
@@ -9,6 +16,9 @@ MATCH_BEFORE_SECONDS = 5
 MATCH_AFTER_SECONDS = 5
 SCORE_BEFORE_SECONDS = 3
 SCORE_AFTER_SECONDS = 3
+
+TPA_AUTH_KEY = "i60ceyqM8KSe94CMb5OQm19OxZUghZ8oDfjHMwnoUPztvC4g87KBBlWGtN4vkLdN"
+tba = tbapy.TBA(TPA_AUTH_KEY)
 
 def get_duration(input_video):
     cmd = [
@@ -98,6 +108,19 @@ def clip_from_stream(input_video, output_video, time_segments):
 
 
 def main():
+    # test()
+
+    # Pull the list of matches from TBA
+    matches = requests.get(
+        f"https://www.thebluealliance.com/api/v3/event/{EVENT_KEY}/matches/simple",
+        headers={
+            "X-TBA-Auth-Key": TBA_AUTH_KEY,
+        }
+    ).json()
+    print(matches)
+
+
+def test():
     stream_start_time = get_start_time(f"{FOLDER}/stream.mp4")
     print(f"Stream start time: {stream_start_time}")
 

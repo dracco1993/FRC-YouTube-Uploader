@@ -43,7 +43,7 @@ def main():
             print("-t will load updatePlaylistThumbnails")
             exit(0)
     try:
-        pyforms_lite.start_app(FRC_Uploader, geometry=(200, 200, 1, 1))
+        pyforms_lite.start_app(FRC_Uploader, geometry=(100, 100, 900, 600))
     except Exception as e:
         print(e)
 

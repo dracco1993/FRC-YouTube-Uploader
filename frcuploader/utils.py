@@ -50,16 +50,16 @@ def quarters_yt_title(options):
     mnum = options.mnum
     if mnum <= 8:
         return (
-            f"{options.ename} - Quarterfinal Match {mnum}"
+            f"{options.event_name} - Quarterfinal Match {mnum}"
             if not options.replay
-            else f"{options.ename} - Quarterfinal Match {mnum} Replay"
+            else f"{options.event_name} - Quarterfinal Match {mnum} Replay"
         )
     elif mnum <= 12:
         mnum -= 8
         return (
-            f"{options.ename} - Quarterfinal Tiebreaker {mnum}"
+            f"{options.event_name} - Quarterfinal Tiebreaker {mnum}"
             if not options.replay
-            else f"{options.ename} - Quarterfinal Tiebreaker {mnum} Replay"
+            else f"{options.event_name} - Quarterfinal Tiebreaker {mnum} Replay"
         )
     else:
         raise ValueError("options.mnum must be within 1 and 12")
@@ -69,16 +69,16 @@ def semis_yt_title(options):
     mnum = options.mnum
     if mnum <= 4:
         return (
-            f"{options.ename} - Semifinal Match {mnum}"
+            f"{options.event_name} - Semifinal Match {mnum}"
             if not options.replay
-            else f"{options.ename} - Semifinal Match {mnum} Replay"
+            else f"{options.event_name} - Semifinal Match {mnum} Replay"
         )
     elif mnum <= 6:
         mnum -= 4
         return (
-            f"{options.ename} - Semifinal Tiebreaker {mnum}"
+            f"{options.event_name} - Semifinal Tiebreaker {mnum}"
             if not options.replay
-            else f"{options.ename} - Semifinal Tiebreaker {mnum} Replay"
+            else f"{options.event_name} - Semifinal Tiebreaker {mnum} Replay"
         )
     else:
         raise ValueError("options.mnum must be within 1 and 6")
@@ -86,9 +86,9 @@ def semis_yt_title(options):
 
 def finals_yt_title(options):
     return (
-        f"{options.ename} - Final Match {options.mnum}"
+        f"{options.event_name} - Final Match {options.mnum}"
         if not options.replay
-        else f"{options.ename} - Final Match {options.mnum} Replay"
+        else f"{options.event_name} - Final Match {options.mnum} Replay"
     )
 
 
@@ -96,18 +96,18 @@ def ceremonies_yt_title(options):
     title = None
     if options.ceremonies is 1:
         if not options.eday:
-            title = f"{options.ename} - {options.day} Opening Ceremonies"
+            title = f"{options.event_name} - {options.day} Opening Ceremonies"
         else:
-            title = f"{options.ename} - Day {options.eday} Opening Ceremonies"
+            title = f"{options.event_name} - Day {options.eday} Opening Ceremonies"
     elif options.ceremonies is 2:
-        title = f"{options.ename} - Alliance Selection"
+        title = f"{options.event_name} - Alliance Selection"
     elif options.ceremonies is 3:
         if not options.eday:
-            title = f"{options.ename} - Closing Ceremonies"
+            title = f"{options.event_name} - Closing Ceremonies"
         else:
-            title = f"{options.ename} - Day {options.eday} Closing Ceremonies"
+            title = f"{options.event_name} - Day {options.eday} Closing Ceremonies"
     elif options.ceremonies is 4:
-        title = f"{options.ename} - Highlight Reel"
+        title = f"{options.event_name} - Highlight Reel"
     return title
 
 
@@ -341,8 +341,8 @@ def finals_match_code(mtype, mnum):
     return match_code
 
 
-def get_match_code(mtype, mnum, mcode):
-    if any(k == mcode for k in ("", "0")):
+def get_match_code(mtype, mnum, match_code):
+    if any(k == match_code for k in ("", "0")):
         switcher = {
             "qm": quals_match_code,
             "qf": quarters_match_code,
@@ -350,8 +350,8 @@ def get_match_code(mtype, mnum, mcode):
             "f1m": finals_match_code,
         }
         return switcher[mtype](mtype, mnum)
-    print(f"Uploading as {mcode}")
-    return mcode.lower()
+    print(f"Uploading as {match_code}")
+    return match_code.lower()
 
 
 """Data Compliation and Adjustment Functions"""
@@ -385,9 +385,9 @@ def parse_data(match_data):
 
 
 def tba_results(options):
-    mcode = get_match_code(options.mtype, options.mnum, options.mcode)
-    blue_data, red_data = get_match_results(options.ecode, mcode)
-    return blue_data, red_data, mcode
+    match_code = get_match_code(options.mtype, options.mnum, options.match_code)
+    blue_data, red_data = get_match_results(options.event_code, match_code)
+    return blue_data, red_data, match_code
 
 
 def create_description(
@@ -397,7 +397,7 @@ def create_description(
         x == -1 for x in (red1, red2, red3, redScore, blue1, blue2, blue3, blueScore)
     ):
         return consts.NO_TBA_DESCRIPTION.format(
-            ename=options.ename,
+            event_name=options.event_name,
             team=options.prodteam,
             twit=options.twit,
             fb=options.fb,
@@ -405,7 +405,7 @@ def create_description(
         )
     try:
         return options.description.format(
-            ename=options.ename,
+            event_name=options.event_name,
             team=options.prodteam,
             red1=red1,
             red2=red2,
@@ -415,7 +415,7 @@ def create_description(
             blue2=blue2,
             blue3=blue3,
             bluescore=blueScore,
-            ecode=options.ecode,
+            event_code=options.event_code,
             twit=options.twit,
             fb=options.fb,
             weblink=options.weblink,
@@ -514,11 +514,11 @@ def init(options):
     )
     try:
         options.tags = consts.DEFAULT_TAGS.format(
-            options.ecode, game=consts.GAMES[options.ecode[:4]]
-        )  # add the ecode and game to default tags
+            options.event_code, game=consts.GAMES[options.event_code[:4]]
+        )  # add the event_code and game to default tags
     except KeyError as e:
         options.tags = consts.DEFAULT_TAGS.format(
-            options.ecode, game=""
+            options.event_code, game=""
         )  # new year so just use empty string for game
         print(
             "This must be a new year and frcuploader doesn't know the game name, please message Nikki or whoever runs this repo at that point"
@@ -526,7 +526,7 @@ def init(options):
     # default category is science & technology
     options.category = 28
     options.title = (
-        options.ename + f" - Qualification Match {options.mnum}"
+        options.event_name + f" - Qualification Match {options.mnum}"
     )  # default title
     if any(
         k == options.description
@@ -570,7 +570,7 @@ def init(options):
 
 
 def pre_upload(options):
-    mcode = None
+    match_code = None
     tags = None
     if not options.ceremonies:
         print(f"Initializing upload for {options.mtype} match {options.mnum}")
@@ -581,12 +581,12 @@ def pre_upload(options):
         print(f"Title Length: {len(options.yttitle)} characters")
         return "Title cannot exceed 100 characters, please adjust your settings to reduce the title length"
     if options.tba:
-        blue_data, red_data, mcode = tba_results(options)
+        blue_data, red_data, match_code = tba_results(options)
         tags = options.tags.split(",")
         for team in blue_data[1:] + red_data[1:]:
             tags.append(f"frc{team}")
-        tags.extend(options.ename.split(" "))
-        tags.append("frc" + re.search("\D+", options.ecode).group())
+        tags.extend(options.event_name.split(" "))
+        tags.append("frc" + re.search("\D+", options.event_code).group())
 
         body = dict(
             snippet=dict(
@@ -598,10 +598,10 @@ def pre_upload(options):
             status=dict(privacyStatus=options.privacy),
         )
     else:
-        mcode = get_match_code(options.mtype, options.mnum, options.mcode)
+        match_code = get_match_code(options.mtype, options.mnum, options.match_code)
 
         tags = options.tags.split(",")
-        tags.append("frc" + re.search(r"\D+", options.ecode).group())
+        tags.append("frc" + re.search(r"\D+", options.event_code).group())
 
         body = dict(
             snippet=dict(
@@ -618,10 +618,10 @@ def pre_upload(options):
         ret, options.vid = upload(
             consts.youtube, body, os.path.join(options.where, options.file)
         )
-    return post_upload(options, mcode) if ret else "Failed to Upload\n"
+    return post_upload(options, match_code) if ret else "Failed to Upload\n"
 
 
-def post_upload(options, mcode):
+def post_upload(options, match_code):
     try:
         if "thumbnail.png" in options.files:
             update_thumbnail(options.vid, os.path.join(options.where, "thumbnail.png"))
@@ -640,12 +640,12 @@ def post_upload(options, mcode):
         print("Failed to post to playlist")
 
     if options.tba:
-        request_body = json.dumps({mcode: options.vid})
-        post_video(options.tbaID, options.tbaSecret, request_body, options.ecode)
+        request_body = json.dumps({match_code: options.vid})
+        post_video(options.tbaID, options.tbaSecret, request_body, options.event_code)
     elif options.ceremonies and options.post:
         request_body = json.dumps([options.vid])
         post_video(
-            options.tbaID, options.tbaSecret, request_body, options.ecode, "media"
+            options.tbaID, options.tbaSecret, request_body, options.event_code, "media"
         )
 
     if options.sendto:
