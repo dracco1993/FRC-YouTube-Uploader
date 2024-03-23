@@ -17,8 +17,8 @@ MATCH_AFTER_SECONDS = 5
 SCORE_BEFORE_SECONDS = 3
 SCORE_AFTER_SECONDS = 3
 
-TPA_AUTH_KEY = "i60ceyqM8KSe94CMb5OQm19OxZUghZ8oDfjHMwnoUPztvC4g87KBBlWGtN4vkLdN"
-tba = tbapy.TBA(TPA_AUTH_KEY)
+TBA_AUTH_KEY = "i60ceyqM8KSe94CMb5OQm19OxZUghZ8oDfjHMwnoUPztvC4g87KBBlWGtN4vkLdN"
+tba = tbapy.TBA(TBA_AUTH_KEY)
 
 def get_duration(input_video):
     cmd = [

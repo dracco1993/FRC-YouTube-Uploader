@@ -254,6 +254,9 @@ class FRC_Uploader(BaseWidget):
         )
         self.__load_form()
 
+    def get_event_code(self):
+        return self._event_code.value
+
     def __togglescroll(self):
         self._autoscroll = False if self._autoscroll else True
 

@@ -84,4 +84,7 @@ os.makedirs(yt_accounts_folder, exist_ok=True)
 queue_values = os.path.join(frc_folder, "frc_queue_values.txt")
 form_values = os.path.join(frc_folder, "frc_form_values.json")
 log_file = os.path.join(frc_folder, "frc_log.txt")
+split_file = os.path.join(frc_folder, "split_matches.txt")
 rec_formats = (".ts", ".mkv", ".avi", ".mp4", ".flv", ".mov")
+
+event_code = "2024incol"
