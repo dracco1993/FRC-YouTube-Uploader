@@ -3,7 +3,7 @@
 
 from . import consts
 from .utils import (finals_match_code, get_match_results, quarters_match_code,
-                    semis_match_code, tiebreak_mnum)
+                    semis_match_code, tiebreak_match_num)
 from .youtube import *
 
 
@@ -98,20 +98,20 @@ def main():
         title = str(playlist_item["snippet"]["title"])
         video_id = str(playlist_item["snippet"]["resourceId"]["videoId"])
         if "Qual" in title:
-            mnum = None
+            match_num = None
             try:
-                mnum = f"qm{title[title.find('Match') + 5:].split(' ')[1]}"
+                match_num = f"qm{title[title.find('Match') + 5:].split(' ')[1]}"
             except IndexError as e:
                 print(title)
                 print(e)
-            print(f"Posting {mnum}")
-            consts.tba.add_match_videos({mnum: video_id})
+            print(f"Posting {match_num}")
+            consts.tba.add_match_videos({match_num: video_id})
             update_description(
                 youtube,
                 playlist_item,
                 video_id,
                 event_code,
-                mnum,
+                match_num,
                 event_name,
                 team,
                 twit,
@@ -124,16 +124,16 @@ def main():
             except ValueError as e:
                 num = int(title[title.find("Tiebreaker") + 10 :].split(" ")[1])
             if "Tiebreak" in title:
-                num = tiebreak_mnum(num, "qf")
-            mnum = quarters_match_code("qf", num)
-            print(f"Posting {mnum}")
-            consts.tba.add_match_videos({mnum: video_id})
+                num = tiebreak_match_num(num, "qf")
+            match_num = quarters_match_code("qf", num)
+            print(f"Posting {match_num}")
+            consts.tba.add_match_videos({match_num: video_id})
             update_description(
                 youtube,
                 playlist_item,
                 video_id,
                 event_code,
-                mnum,
+                match_num,
                 event_name,
                 team,
                 twit,
@@ -146,16 +146,16 @@ def main():
             except ValueError as e:
                 num = int(title[title.find("Tiebreaker") + 10 :].split(" ")[1])
             if "Tiebreak" in title:
-                num = tiebreak_mnum(num, "sf")
-            mnum = semis_match_code("sf", num)
-            print(f"Posting {mnum}")
-            consts.tba.add_match_videos({mnum: video_id})
+                num = tiebreak_match_num(num, "sf")
+            match_num = semis_match_code("sf", num)
+            print(f"Posting {match_num}")
+            consts.tba.add_match_videos({match_num: video_id})
             update_description(
                 youtube,
                 playlist_item,
                 video_id,
                 event_code,
-                mnum,
+                match_num,
                 event_name,
                 team,
                 twit,
@@ -168,16 +168,16 @@ def main():
             except ValueError as e:
                 num = int(title[title.find("Tiebreaker") + 10 :].split(" ")[1])
             if "Tiebreak" in title:
-                num = tiebreak_mnum(num, "f1m")
-            mnum = finals_match_code("f1m", num)
-            print(f"Posting {mnum}")
-            consts.tba.add_match_videos({mnum: video_id})
+                num = tiebreak_match_num(num, "f1m")
+            match_num = finals_match_code("f1m", num)
+            print(f"Posting {match_num}")
+            consts.tba.add_match_videos({match_num: video_id})
             update_description(
                 youtube,
                 playlist_item,
                 video_id,
                 event_code,
-                mnum,
+                match_num,
                 event_name,
                 team,
                 twit,

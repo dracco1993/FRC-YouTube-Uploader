@@ -114,13 +114,13 @@ class FRC_Uploader(BaseWidget):
             visible=False,
             helptext="READ THE INSTRUCTIONS TO FIND OUT HOW TO USE THIS!",
         )
-        self._mnum = ControlNumber("Match Number", minimum=1, maximum=500)
-        self._mtype = ControlCombo("Match Type")
+        self._match_num = ControlNumber("Match Number", minimum=1, maximum=500)
+        self._match_type = ControlCombo("Match Type")
         self._tiebreak = ControlCheckBox("Tiebreaker")
         self._tba = ControlCheckBox("Use TBA")
         self._replay = ControlCheckBox("Replay")
         self._ceremonies = ControlCombo("Ceremonies")
-        self._eday = ControlCombo("Event Day")
+        self._event_day = ControlCombo("Event Day")
         self._end = ControlNumber("Last Match Number", minimum=0, maximum=500)
 
         # Output Box
@@ -141,11 +141,11 @@ class FRC_Uploader(BaseWidget):
             {
                 "-Match Values": [
                     (" ", "_match_code", " "),
-                    (" ", "_mnum", " "),
-                    (" ", "_mtype", " "),
+                    (" ", "_match_num", " "),
+                    (" ", "_match_type", " "),
                     (" ", "_tiebreak", "_tba", "_replay", " "),
                     (" ", "_ceremonies", " "),
-                    (" ", "_eday", " "),
+                    (" ", "_event_day", " "),
                     (" ", "_end", " "),
                 ],
                 "-Status Output-": [
@@ -203,24 +203,24 @@ class FRC_Uploader(BaseWidget):
         self._tbaSecret.value = "Go to thebluealliance.com/request/apiwrite to get keys"
         self._description.value = consts.DEFAULT_DESCRIPTION
         self._match_code.value = "0"
-        self._mnum.value = 1
+        self._match_num.value = 1
 
         # Add ControlCombo values
         for t in consts.VALID_PRIVACY_STATUSES:
             self._privacy += t
-        self._mtype += ("Qualifications", "qm")
-        self._mtype += ("Quarterfinals", "qf")
-        self._mtype += ("Semifinals", "sf")
-        self._mtype += ("Finals", "f1m")
+        self._match_type += ("Qualifications", "qm")
+        self._match_type += ("Quarterfinals", "qf")
+        self._match_type += ("Semifinals", "sf")
+        self._match_type += ("Finals", "f1m")
         self._ceremonies += ("None", 0)
         self._ceremonies += ("Opening Ceremonies", 1)
         self._ceremonies += ("Alliance Selection", 2)
         self._ceremonies += ("Closing Ceremonies", 3)
         self._ceremonies += ("Highlight Reel", 4)
-        self._eday += ("Ignore", 0)
-        self._eday += ("1", 1)
-        self._eday += ("2", 2)
-        self._eday += ("3", 3)
+        self._event_day += ("Ignore", 0)
+        self._event_day += ("1", 1)
+        self._event_day += ("2", 2)
+        self._event_day += ("3", 3)
 
         # Define the button action
         self._button.value = self.__button_action
@@ -241,12 +241,12 @@ class FRC_Uploader(BaseWidget):
             self._tbaSecret,
             self._description,
             self._match_code,
-            self._mnum,
-            self._mtype,
+            self._match_num,
+            self._match_type,
             self._tiebreak,
             self._tba,
             self._ceremonies,
-            self._eday,
+            self._event_day,
             self._end,
             self._newest,
             self._privacy,
@@ -280,12 +280,12 @@ class FRC_Uploader(BaseWidget):
             consts.tba.update_trusted(options.tbaID, options.tbaSecret, options.event_code)
         options.description = self._description.value
         options.match_code = self._match_code.value
-        options.mnum = int(self._mnum.value)
-        options.mtype = self._mtype.value
+        options.match_num = int(self._match_num.value)
+        options.match_type = self._match_type.value
         options.tiebreak = deepcopy(self._tiebreak.value)
         options.tba = deepcopy(self._tba.value)
         options.ceremonies = self._ceremonies.value
-        options.eday = self._eday.value
+        options.event_day = self._event_day.value
         options.end = 0
         options.replay = self._replay.value
         self._replay.value = False
@@ -315,25 +315,25 @@ class FRC_Uploader(BaseWidget):
             if options.ceremonies:
                 self._qview += (options.event_code, consts.cerem[options.ceremonies], "N/A")
             else:
-                self._qview += (options.event_code, options.mtype, options.mnum)
+                self._qview += (options.event_code, options.match_type, options.match_num)
         elif not options.newest:
-            for r in range(options.mnum, int(self._end.value)):
-                self._qview += (options.event_code, options.mtype, options.mnum)
+            for r in range(options.match_num, int(self._end.value)):
+                self._qview += (options.event_code, options.match_type, options.match_num)
                 self._queue.put(options)
                 self._queueref.append(options)
                 self._qview.resize_rows_contents()
                 options = deepcopy(options)
-                options.mnum += 1
+                options.match_num += 1
         else:
             print(
                 "Using Last Match Number and Get Newest File together is not supported"
             )
             print(
-                f"Will fallback to just uploading the newest file for mnum {options.mnum}"
+                f"Will fallback to just uploading the newest file for match_num {options.match_num}"
             )
             self._end.value = 0
         if int(self._end.value):
-            self._qview += (options.event_code, options.mtype, options.mnum)
+            self._qview += (options.event_code, options.match_type, options.match_num)
         self._queue.put(options)
         self._queueref.append(options)
         self._qview.resize_rows_contents()
@@ -344,14 +344,14 @@ class FRC_Uploader(BaseWidget):
             consts.first_run = False
         if not self._ceremonies.value:
             if not int(self._end.value):
-                self._mnum.value = self._mnum.value + 1
+                self._match_num.value = self._match_num.value + 1
             else:
-                self._mnum.value = self._end.value + 1
+                self._match_num.value = self._end.value + 1
                 self._end.value = 0
         elif self._ceremonies.value == 2:
-            self._mnum.value = 1
-            self._mtype.value = "qf"
-        if self._mtype.value == "qm" and self._tiebreak.value:
+            self._match_num.value = 1
+            self._match_type.value = "qf"
+        if self._match_type.value == "qm" and self._tiebreak.value:
             self._tiebreak.value = False
         self.__save_form()
 
@@ -410,12 +410,12 @@ class FRC_Uploader(BaseWidget):
             row[9] = deepcopy(options.tbaSecret)
             row[10] = deepcopy(options.description)
             row[11] = deepcopy(options.match_code)
-            row[12] = deepcopy(options.mnum)
-            row[13] = deepcopy(options.mtype)
+            row[12] = deepcopy(options.match_num)
+            row[13] = deepcopy(options.match_type)
             row[14] = deepcopy(options.tiebreak)
             row[15] = deepcopy(options.tba)
             row[16] = deepcopy(options.ceremonies)
-            row[17] = deepcopy(options.eday)
+            row[17] = deepcopy(options.event_day)
             row[18] = deepcopy(options.end)
             row[19] = deepcopy(options.newest)
             row[20] = deepcopy(options.privacy)
@@ -492,7 +492,7 @@ class FRC_Uploader(BaseWidget):
                                 "N/A",
                             )
                         else:
-                            self._qview += (options.event_code, options.mtype, options.mnum)
+                            self._qview += (options.event_code, options.match_type, options.match_num)
                         self._queue.put(options)
                         self._qview.resize_rows_contents()
                         self.__save_form(options)
@@ -511,7 +511,7 @@ class FRC_Uploader(BaseWidget):
                             "N/A",
                         )
                     else:
-                        self._qview += (options.event_code, options.mtype, options.mnum)
+                        self._qview += (options.event_code, options.match_type, options.match_num)
                     self._queue.put(options)
                     self._qview.resize_rows_contents()
                     self.__save_form(options)
@@ -534,11 +534,11 @@ class FRC_Uploader(BaseWidget):
         self._tbaSecret.value = "Go to thebluealliance.com/request/apiwrite to get keys"
         self._description.value = consts.DEFAULT_DESCRIPTION
         self._match_code.value = "0"
-        self._mnum.value = 1
+        self._match_num.value = 1
         self._end.value = 0
-        self._mtype.value = "qm"
+        self._match_type.value = "qm"
         self._ceremonies.value = 0
-        self._eday.value = 0
+        self._event_day.value = 0
         self._tba.value = True
         self._where.value = ""
         self._sendto.value = ""

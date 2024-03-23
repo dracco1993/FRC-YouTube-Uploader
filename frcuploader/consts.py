@@ -87,4 +87,4 @@ log_file = os.path.join(frc_folder, "frc_log.txt")
 split_file = os.path.join(frc_folder, "split_matches.txt")
 rec_formats = (".ts", ".mkv", ".avi", ".mp4", ".flv", ".mov")
 
-event_code = "2024incol"
+event_code = "2024inpla"

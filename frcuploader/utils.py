@@ -47,65 +47,65 @@ def quals_yt_title(options):
 
 
 def quarters_yt_title(options):
-    mnum = options.mnum
-    if mnum <= 8:
+    match_num = options.match_num
+    if match_num <= 8:
         return (
-            f"{options.event_name} - Quarterfinal Match {mnum}"
+            f"{options.event_name} - Quarterfinal Match {match_num}"
             if not options.replay
-            else f"{options.event_name} - Quarterfinal Match {mnum} Replay"
+            else f"{options.event_name} - Quarterfinal Match {match_num} Replay"
         )
-    elif mnum <= 12:
-        mnum -= 8
+    elif match_num <= 12:
+        match_num -= 8
         return (
-            f"{options.event_name} - Quarterfinal Tiebreaker {mnum}"
+            f"{options.event_name} - Quarterfinal Tiebreaker {match_num}"
             if not options.replay
-            else f"{options.event_name} - Quarterfinal Tiebreaker {mnum} Replay"
+            else f"{options.event_name} - Quarterfinal Tiebreaker {match_num} Replay"
         )
     else:
-        raise ValueError("options.mnum must be within 1 and 12")
+        raise ValueError("options.match_num must be within 1 and 12")
 
 
 def semis_yt_title(options):
-    mnum = options.mnum
-    if mnum <= 4:
+    match_num = options.match_num
+    if match_num <= 4:
         return (
-            f"{options.event_name} - Semifinal Match {mnum}"
+            f"{options.event_name} - Semifinal Match {match_num}"
             if not options.replay
-            else f"{options.event_name} - Semifinal Match {mnum} Replay"
+            else f"{options.event_name} - Semifinal Match {match_num} Replay"
         )
-    elif mnum <= 6:
-        mnum -= 4
+    elif match_num <= 6:
+        match_num -= 4
         return (
-            f"{options.event_name} - Semifinal Tiebreaker {mnum}"
+            f"{options.event_name} - Semifinal Tiebreaker {match_num}"
             if not options.replay
-            else f"{options.event_name} - Semifinal Tiebreaker {mnum} Replay"
+            else f"{options.event_name} - Semifinal Tiebreaker {match_num} Replay"
         )
     else:
-        raise ValueError("options.mnum must be within 1 and 6")
+        raise ValueError("options.match_num must be within 1 and 6")
 
 
 def finals_yt_title(options):
     return (
-        f"{options.event_name} - Final Match {options.mnum}"
+        f"{options.event_name} - Final Match {options.match_num}"
         if not options.replay
-        else f"{options.event_name} - Final Match {options.mnum} Replay"
+        else f"{options.event_name} - Final Match {options.match_num} Replay"
     )
 
 
 def ceremonies_yt_title(options):
     title = None
     if options.ceremonies is 1:
-        if not options.eday:
+        if not options.event_day:
             title = f"{options.event_name} - {options.day} Opening Ceremonies"
         else:
-            title = f"{options.event_name} - Day {options.eday} Opening Ceremonies"
+            title = f"{options.event_name} - Day {options.event_day} Opening Ceremonies"
     elif options.ceremonies is 2:
         title = f"{options.event_name} - Alliance Selection"
     elif options.ceremonies is 3:
-        if not options.eday:
+        if not options.event_day:
             title = f"{options.event_name} - Closing Ceremonies"
         else:
-            title = f"{options.event_name} - Day {options.eday} Closing Ceremonies"
+            title = f"{options.event_name} - Day {options.event_day} Closing Ceremonies"
     elif options.ceremonies is 4:
         title = f"{options.event_name} - Highlight Reel"
     return title
@@ -120,7 +120,7 @@ def quals_filename(options):
         fl = f.lower()
         if all(
             [
-                " " + str(options.mnum) + "." in fl
+                " " + str(options.match_num) + "." in fl
                 and any(k in fl for k in ("qual", "qualification", "qm"))
             ]
         ):
@@ -137,11 +137,11 @@ def quals_filename(options):
 
 def quarters_filename(options):
     file = None
-    if 1 <= options.mnum <= 8:
+    if 1 <= options.match_num <= 8:
         for f in options.files:
             fl = f.lower()
             if all(
-                k in fl for k in ("quarter", "final", " " + str(options.mnum) + ".")
+                k in fl for k in ("quarter", "final", " " + str(options.match_num) + ".")
             ):
                 if "tiebreak" not in fl:
                     if options.replay:
@@ -152,12 +152,12 @@ def quarters_filename(options):
                         if "replay" not in fl:
                             file = f
                             break
-    elif 9 <= options.mnum <= 12:
-        mnum = options.mnum - 8
+    elif 9 <= options.match_num <= 12:
+        match_num = options.match_num - 8
         for f in options.files:
             fl = f.lower()
             if all(
-                k in fl for k in ("quarter", "tiebreak", "final", " " + str(mnum) + ".")
+                k in fl for k in ("quarter", "tiebreak", "final", " " + str(match_num) + ".")
             ):
                 if options.replay:
                     if "replay" in fl:
@@ -172,10 +172,10 @@ def quarters_filename(options):
 
 def semis_filename(options):
     file = None
-    if options.mnum <= 4:
+    if options.match_num <= 4:
         for f in options.files:
             fl = f.lower()
-            if all(k in fl for k in ("semi", "final", " " + str(options.mnum) + ".")):
+            if all(k in fl for k in ("semi", "final", " " + str(options.match_num) + ".")):
                 if "tiebreak" not in fl:
                     if options.replay:
                         if "replay" in fl:
@@ -185,12 +185,12 @@ def semis_filename(options):
                         if "replay" not in fl:
                             file = f
                             break
-    elif options.mnum <= 6:
-        mnum = options.mnum - 4
+    elif options.match_num <= 6:
+        match_num = options.match_num - 4
         for f in options.files:
             fl = f.lower()
             if all(
-                k in fl for k in ("semi", "tiebreak", "final", " " + str(mnum) + ".")
+                k in fl for k in ("semi", "tiebreak", "final", " " + str(match_num) + ".")
             ):
                 if options.replay:
                     if "replay" in fl:
@@ -205,10 +205,10 @@ def semis_filename(options):
 
 def finals_filename(options):
     file = None
-    if options.mnum <= 2:
+    if options.match_num <= 2:
         for f in options.files:
             fl = f.lower()
-            if all(k in fl for k in ("final", " " + str(options.mnum) + ".")):
+            if all(k in fl for k in ("final", " " + str(options.match_num) + ".")):
                 if (
                     all(k not in fl for k in ("quarter", "semi"))
                     and "tiebreak" not in fl
@@ -221,11 +221,11 @@ def finals_filename(options):
                         if "replay" not in fl:
                             file = f
                             break
-    elif options.mnum >= 3:
+    elif options.match_num >= 3:
         for f in options.files:
             fl = f.lower()
             if "final" in fl and any(
-                k in fl for k in ("tiebreak", " " + str(options.mnum) + ".")
+                k in fl for k in ("tiebreak", " " + str(options.match_num) + ".")
             ):
                 if all(k not in fl for k in ("quarter", "semi")):
                     if options.replay:
@@ -245,7 +245,7 @@ def ceremonies_filename(options):
         for f in options.files:
             fl = f.lower()
             if all(k in fl for k in ("opening", "ceremon")):
-                if any(k in fl for k in (options.day.lower(), f"day {options.eday}")):
+                if any(k in fl for k in (options.day.lower(), f"day {options.event_day}")):
                     file = f
                     break
     elif options.ceremonies is 2:
@@ -258,10 +258,10 @@ def ceremonies_filename(options):
         for f in options.files:
             fl = f.lower()
             if any(k in fl for k in ("closing", "award")) and "ceremon" in fl:
-                if any(k in fl for k in (options.day.lower(), f"day {options.eday}")):
+                if any(k in fl for k in (options.day.lower(), f"day {options.event_day}")):
                     file = f
                     break
-                elif options.eday == 0:
+                elif options.event_day == 0:
                     file = f
                     break
     elif options.ceremonies is 4:
@@ -289,11 +289,11 @@ def create_names(options):
         }
         try:
             if options.newest:
-                return yt[options.mtype](options)
+                return yt[options.match_type](options)
             else:
-                return fname[options.mtype](options), yt[options.mtype](options)
+                return fname[options.match_type](options), yt[options.match_type](options)
         except KeyError:
-            print(options.mtype)
+            print(options.match_type)
     else:
         return ceremonies_filename(options), ceremonies_yt_title(options)
 
@@ -301,47 +301,47 @@ def create_names(options):
 """Match Code Generators"""
 
 
-def quals_match_code(mtype, mnum):
-    match_code = str(mtype) + str(mnum)
+def quals_match_code(match_type, match_num):
+    match_code = str(match_type) + str(match_num)
     return match_code
 
 
-def quarters_match_code(mtype, mnum):
-    match_set = str(mnum % 4)
+def quarters_match_code(match_type, match_num):
+    match_set = str(match_num % 4)
     match_set = "4" if match_set == "0" else match_set
-    match_code = mtype + match_set
-    if mnum <= 4:
+    match_code = match_type + match_set
+    if match_num <= 4:
         match_code += "m1"
-    elif mnum <= 8:
+    elif match_num <= 8:
         match_code += "m2"
-    elif mnum <= 12:
+    elif match_num <= 12:
         match_code += "m3"
     else:
         raise ValueError("Match Number can't be larger than 12")
     return match_code
 
 
-def semis_match_code(mtype, mnum):
-    match_set = str(mnum % 2)
+def semis_match_code(match_type, match_num):
+    match_set = str(match_num % 2)
     match_set = "2" if match_set == "0" else match_set
-    match_code = mtype + match_set
-    if mnum <= 2:
+    match_code = match_type + match_set
+    if match_num <= 2:
         match_code += "m1"
-    elif mnum <= 4:
+    elif match_num <= 4:
         match_code += "m2"
-    elif mnum <= 6:
+    elif match_num <= 6:
         match_code += "m3"
     else:
         raise ValueError("Match Number can't be larger than 6")
     return match_code
 
 
-def finals_match_code(mtype, mnum):
-    match_code = mtype + str(mnum)
+def finals_match_code(match_type, match_num):
+    match_code = match_type + str(match_num)
     return match_code
 
 
-def get_match_code(mtype, mnum, match_code):
+def get_match_code(match_type, match_num, match_code):
     if any(k == match_code for k in ("", "0")):
         switcher = {
             "qm": quals_match_code,
@@ -349,7 +349,7 @@ def get_match_code(mtype, mnum, match_code):
             "sf": semis_match_code,
             "f1m": finals_match_code,
         }
-        return switcher[mtype](mtype, mnum)
+        return switcher[match_type](match_type, match_num)
     print(f"Uploading as {match_code}")
     return match_code.lower()
 
@@ -385,7 +385,7 @@ def parse_data(match_data):
 
 
 def tba_results(options):
-    match_code = get_match_code(options.mtype, options.mnum, options.match_code)
+    match_code = get_match_code(options.match_type, options.match_num, options.match_code)
     blue_data, red_data = get_match_results(options.event_code, match_code)
     return blue_data, red_data, match_code
 
@@ -425,14 +425,14 @@ def create_description(
         return options.description
 
 
-def tiebreak_mnum(mnum, mtype):
+def tiebreak_match_num(match_num, match_type):
     switcher = {
-        "qm": mnum,
-        "qf": mnum + 8,
-        "sf": mnum + 4,
+        "qm": match_num,
+        "qf": match_num + 8,
+        "sf": match_num + 4,
         "f1m": 3,
     }
-    return switcher[mtype]
+    return switcher[match_type]
 
 
 """Additional YouTube Functions"""
@@ -490,8 +490,8 @@ def post_video(token, secret, match_video, event_key, loc="match_videos"):
 
 
 def upload_multiple_videos(options):
-    for mnum in range(options.mnum, options.end + 1):
-        options.mnum = mnum
+    for match_num in range(options.match_num, options.end + 1):
+        options.match_num = match_num
         options.file, options.yttitle = create_names(options)
         try:
             print(pre_upload(options))
@@ -526,7 +526,7 @@ def init(options):
     # default category is science & technology
     options.category = 28
     options.title = (
-        options.event_name + f" - Qualification Match {options.mnum}"
+        options.event_name + f" - Qualification Match {options.match_num}"
     )  # default title
     if any(
         k == options.description
@@ -538,8 +538,8 @@ def init(options):
 
     # fix types except options.end
     options.ceremonies = int(options.ceremonies)
-    options.mnum = int(options.mnum)
-    options.eday = int(options.eday)
+    options.match_num = int(options.match_num)
+    options.event_day = int(options.event_day)
 
     # seperate case to push to TBA
     if options.ceremonies != 0:
@@ -549,7 +549,7 @@ def init(options):
             options.post = False
         options.tba = False  # stupid hack to avoid grabbing match data
     if options.tiebreak:
-        options.mnum = tiebreak_mnum(options.mnum, options.mtype)
+        options.match_num = tiebreak_match_num(options.match_num, options.match_type)
     if options.newest:
         options.yttitle = create_names(options)
     else:
@@ -557,7 +557,7 @@ def init(options):
 
     if options.file is not None:
         print(f"Found {options.file} to upload")
-        if options.end > options.mnum:
+        if options.end > options.match_num:
             upload_multiple_videos(options)
         else:
             try:
@@ -573,7 +573,7 @@ def pre_upload(options):
     match_code = None
     tags = None
     if not options.ceremonies:
-        print(f"Initializing upload for {options.mtype} match {options.mnum}")
+        print(f"Initializing upload for {options.match_type} match {options.match_num}")
     else:
         print(f"Initializing upload for: {ceremonies_yt_title(options)}")
     print(f"YouTube title is {options.yttitle}")
@@ -598,7 +598,7 @@ def pre_upload(options):
             status=dict(privacyStatus=options.privacy),
         )
     else:
-        match_code = get_match_code(options.mtype, options.mnum, options.match_code)
+        match_code = get_match_code(options.match_type, options.match_num, options.match_code)
 
         tags = options.tags.split(",")
         tags.append("frc" + re.search(r"\D+", options.event_code).group())
